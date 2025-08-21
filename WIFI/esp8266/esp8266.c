@@ -364,11 +364,13 @@ static void Excute_ESP8266_CLIENT_CONNECTED(ESP8266_Config* esp8266_config)
                 return;
             }
         }
+        HAL_TIM_Base_Stop(esp8266_config->htim);
         printf("ESP8266 Client Connected,ID: %d\n", esp8266_config->current_client_id);
         esp8266_config->change_Status_flag = False;
     }
     else
     {
+        HAL_TIM_Base_Stop(esp8266_config->htim);
         printf("ESP8266 Connected to AP\n");
         esp8266_config->change_Status_flag = False;
     }
@@ -433,7 +435,7 @@ static void handoff_ESP8266(ESP8266_Config* esp8266_config,SystemState new_state
     // }
     esp8266_config->last_systemstate = esp8266_config->systemstate;
     esp8266_config->systemstate = new_state;
-    printf("ESP8266 State Transition: %d -> %d\n", esp8266_config->last_systemstate, esp8266_config->systemstate);
+    // printf("ESP8266 State Transition: %d -> %d\n", esp8266_config->last_systemstate, esp8266_config->systemstate);
 
     esp8266_config->retry_count = 0;
 
@@ -569,7 +571,7 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
         static uint8_t first_OK = 0;
         if (strstr((char *)esp8266_config->data, "OK") != NULL)
         {
-            printf("%s",esp8266_config->data);
+            // printf("%s",esp8266_config->data);
             if (first_OK == 0)
             {
                 first_OK = 1;
