@@ -103,7 +103,7 @@ static void Excute_ESP8266_Init(ESP8266_Config* esp8266_config)
     // esp8266_config->retry_count = 0;
     esp8266_config->systemstate = STATE_AT;
     esp8266_config->change_Status_flag = True;
-    printf("ESP8266 Init...\n");
+    //printf("ESP8266 Init...\n");
 }
  
 
@@ -120,7 +120,7 @@ static void Excute_ESP8266_AT(ESP8266_Config* esp8266_config)
     HAL_TIM_Base_Start_IT(esp8266_config->htim);
     esp8266_config->change_Status_flag = False;
     // HAL_Delay(100);
-    // printf("ESP8266 AT Configing...\n");
+    // //printf("ESP8266 AT Configing...\n");
 }
 
 /**
@@ -166,7 +166,7 @@ static void Excute_ESP8266_CIPAP(ESP8266_Config* esp8266_config)
     // esp8266_config->retry_count = 0;
     HAL_TIM_Base_Start_IT(esp8266_config->htim);
     esp8266_config->change_Status_flag = False;
-    // printf("ESP8266 CIPAP Configing,IP: %s\n", esp8266_config->AP_ip);
+    // //printf("ESP8266 CIPAP Configing,IP: %s\n", esp8266_config->AP_ip);
 }
 
 /**
@@ -190,7 +190,7 @@ static void Excute_ESP8266_CIPMUX(ESP8266_Config* esp8266_config)
         // esp8266_config->retry_count = 0;
         HAL_TIM_Base_Start_IT(esp8266_config->htim);
         esp8266_config->change_Status_flag = False;
-        // printf("ESP8266 CIPMUX Configing\n");
+        // //printf("ESP8266 CIPMUX Configing\n");
 
 }
 
@@ -212,7 +212,7 @@ static void Excute_ESP8266_CWSAP(ESP8266_Config* esp8266_config)
         // esp8266_config->retry_count = 0;
         HAL_TIM_Base_Start_IT(esp8266_config->htim);
         esp8266_config->change_Status_flag = False;
-        // printf("WIFI CREATING\n");  
+        // //printf("WIFI CREATING\n");  
 }
 
 
@@ -229,7 +229,7 @@ static void Excute_ESP8266_CWSAP(ESP8266_Config* esp8266_config)
 //        // esp8266_config->retry_count = 0;
 //        HAL_TIM_Base_Start_IT(esp8266_config->htim);
 //        esp8266_config->change_Status_flag = False;
-//        // printf("WIFI CREATING\n");  
+//        // //printf("WIFI CREATING\n");  
 //}
 
 
@@ -269,7 +269,7 @@ static void Excute_ESP8266_CWMODE(ESP8266_Config* esp8266_config)
         // esp8266_config->retry_count = 0;
         HAL_TIM_Base_Start_IT(esp8266_config->htim);
         esp8266_config->change_Status_flag = False;
-        // printf("ESP8266_MODE Configing %d\n", esp8266_config->mode);
+        // //printf("ESP8266_MODE Configing %d\n", esp8266_config->mode);
 
 }
 
@@ -282,7 +282,7 @@ static void Excute_ESP8266_READY(ESP8266_Config* esp8266_config)
         return;
     }
     
-        printf("ESP8266 is ready,waiting connecting...\n");
+        //printf("ESP8266 is ready,waiting connecting...\n");
         esp8266_config->change_Status_flag = False;
         esp8266_config->systemstate = STATE_READY;
 }
@@ -293,7 +293,7 @@ static void Excute_ESP8266_Timeout(ESP8266_Config* esp8266_config)
 {
     if (esp8266_config->systemstate == STATE_TIMEOUT)
     {
-        printf("ESP8266 Timeout!!!\n");
+        //printf("ESP8266 Timeout!!!\n");
         esp8266_config->change_Status_flag = False;
     }
 }
@@ -354,24 +354,24 @@ static void Excute_ESP8266_CLIENT_CONNECTED(ESP8266_Config* esp8266_config)
         {
             if (esp8266_config->client_id[i] == Exist_Client)
             {
-                // printf("ESP8266 Client ID found: %d\n", i);
+                // //printf("ESP8266 Client ID found: %d\n", i);
                 break;
             }
             else if (i == 3)
             {
-                printf("ESP8266 Client ID not found\n");
+                //printf("ESP8266 Client ID not found\n");
                 handoff_ESP8266(esp8266_config, STATE_READY);
                 return;
             }
         }
         HAL_TIM_Base_Stop(esp8266_config->htim);
-        printf("ESP8266 Client Connected,ID: %d\n", esp8266_config->current_client_id);
+        //printf("ESP8266 Client Connected,ID: %d\n", esp8266_config->current_client_id);
         esp8266_config->change_Status_flag = False;
     }
     else
     {
         HAL_TIM_Base_Stop(esp8266_config->htim);
-        printf("ESP8266 Connected to AP\n");
+        //printf("ESP8266 Connected to AP\n");
         esp8266_config->change_Status_flag = False;
     }
 }
@@ -388,11 +388,11 @@ static void Excute_ESP8266_STATE_RECIVE(ESP8266_Config* esp8266_config)
     {
         if(sscanf(esp8266_config->data,"+IPD,%d,%d:%s",&esp8266_config->current_client_id,&length,&payload) == 3)
         {
-            // printf("%s\n",esp8266_config->data);
+            // //printf("%s\n",esp8266_config->data);
             esp8266_config->client_id[esp8266_config->current_client_id] = Exist_Client;
             if(esp8266_config->esp8266_rx_callback == NULL)
             {
-                printf("Received data from client %d: %s\n", esp8266_config->current_client_id, payload);
+                //printf("Received data from client %d: %s\n", esp8266_config->current_client_id, payload);
             }
             else
             {
@@ -406,7 +406,7 @@ static void Excute_ESP8266_STATE_RECIVE(ESP8266_Config* esp8266_config)
         {
             if(esp8266_config->esp8266_rx_callback == NULL)
             {
-                printf("Received data from client %d: %s\n", esp8266_config->current_client_id, payload);
+                //printf("Received data from client %d: %s\n", esp8266_config->current_client_id, payload);
             }
             else
             {
@@ -435,7 +435,7 @@ static void handoff_ESP8266(ESP8266_Config* esp8266_config,SystemState new_state
     // }
     esp8266_config->last_systemstate = esp8266_config->systemstate;
     esp8266_config->systemstate = new_state;
-    // printf("ESP8266 State Transition: %d -> %d\n", esp8266_config->last_systemstate, esp8266_config->systemstate);
+    // //printf("ESP8266 State Transition: %d -> %d\n", esp8266_config->last_systemstate, esp8266_config->systemstate);
 
     esp8266_config->retry_count = 0;
 
@@ -491,7 +491,7 @@ ESP8266_Config* ESP8266_Init(ESP8266_Mode mode,UART_HandleTypeDef *huart,TIM_Han
     strcpy((char *)esp8266_config_temp->password, password);
     strcpy((char *)esp8266_config_temp->AP_ip, "192.168.4.1");
     esp8266_config_temp->mode = mode;
-    printf("Init success\n");
+    //printf("Init success\n");
 
     return esp8266_config_temp;
 }
@@ -505,10 +505,10 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
     }
     else if(strstr((char *)esp8266_config->data, "CONNECT") != NULL && esp8266_config->mode != ESP8266_MODE_STA)
     {
-        // printf("TCP Connection Request: %s\n", esp8266_config->data);
+        // //printf("TCP Connection Request: %s\n", esp8266_config->data);
         if(sscanf(esp8266_config->data,"%d,CONNECT",&esp8266_config->current_client_id) == 1 && esp8266_config->mode != ESP8266_MODE_STA)
         {
-            printf("TCP Connection ID: %d\n", esp8266_config->current_client_id);
+            //printf("TCP Connection ID: %d\n", esp8266_config->current_client_id);
             handoff_ESP8266(esp8266_config, STATE_CLIENT_CONNECTING);
             // esp8266_config->systemstate = STATE_CLIENT_CONNECTED;
             // esp8266_config->change_Status_flag = True;
@@ -516,13 +516,13 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
         }
         else if (strcmp((char *)esp8266_config->data, "CONNECT") == 0 && esp8266_config->mode == ESP8266_MODE_STA)
         {
-            printf("TCP CIPSTART success!!\n");
+            //printf("TCP CIPSTART success!!\n");
             handoff_ESP8266(esp8266_config,STATE_CLIENT_CONNECTED);
         }
     }
     else if(strstr((char*)esp8266_config->data,"ERROR"))
     {
-        printf("esp8266_status,esp8266_config->systemstate == %d\n", esp8266_config->systemstate);
+        //printf("esp8266_status,esp8266_config->systemstate == %d\n", esp8266_config->systemstate);
     }
     switch (esp8266_config->systemstate)
     {
@@ -550,14 +550,14 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
     case STATE_CWJAP_CONFIG:
         if (strcmp((char *)esp8266_config->data, "WIFI CONNECTED") == 0)
         {
-            printf("%s\n",esp8266_config->data);
+            //printf("%s\n",esp8266_config->data);
             ESP8266_Status_Switch(esp8266_config);    
         }
         break;
     case STATE_CREATE_WIFI_CONFIG:
         if (strstr((char *)esp8266_config->data, "OK") != NULL)
         {
-            printf("%s\n",esp8266_config->data);
+            //printf("%s\n",esp8266_config->data);
             ESP8266_Status_Switch(esp8266_config);
         }
         break;
@@ -571,7 +571,7 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
         static uint8_t first_OK = 0;
         if (strstr((char *)esp8266_config->data, "OK") != NULL)
         {
-            // printf("%s",esp8266_config->data);
+            // //printf("%s",esp8266_config->data);
             if (first_OK == 0)
             {
                 first_OK = 1;
@@ -602,7 +602,7 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
             {
                 if (sscanf((char *)esp8266_config->data,"%d,CLOSED",&esp8266_config->current_client_id) == 1)
                 {
-                    printf("TCP CLOSED ID: %d\n", esp8266_config->current_client_id);
+                    //printf("TCP CLOSED ID: %d\n", esp8266_config->current_client_id);
                     esp8266_config->client_id[esp8266_config->current_client_id] = No_Client;
                     esp8266_config->current_client_id = 255;
                     handoff_ESP8266(esp8266_config, STATE_CLIENT_CONNECTED);
@@ -611,7 +611,7 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
             }
             else if (esp8266_config->mode == ESP8266_MODE_STA)
             {
-                printf("TCP CLOSED\n");
+                //printf("TCP CLOSED\n");
                 handoff_ESP8266(esp8266_config, STATE_CWJAP_CONFIG);
             }
         }
@@ -646,7 +646,7 @@ void Send_msg(ESP8266_Config* esp8266_config, const char* msg)
     }
     else
     {
-        printf("ESP8266 not ready or invalid parameters.\n");
+        //printf("ESP8266 not ready or invalid parameters.\n");
     }
 }
 
@@ -665,7 +665,7 @@ void Excute_ESP8266_TIMEOUT_CHECK(ESP8266_Config* esp8266_config,uint8_t pulse)
     if (esp8266_config != NULL)
     {
         esp8266_config->tick++;
-        // printf("ESP8266 Timeout Check: %d\n", esp8266_config->global_config.tick);
+        // //printf("ESP8266 Timeout Check: %d\n", esp8266_config->global_config.tick);
         if(esp8266_config->tick >= ESP8266_TIMEOUT_TICK_SEC * 1000 / pulse)
         {
             esp8266_config->tick = 0;
@@ -675,12 +675,12 @@ void Excute_ESP8266_TIMEOUT_CHECK(ESP8266_Config* esp8266_config,uint8_t pulse)
                 esp8266_config->change_Status_flag = True;
                 if(esp8266_config->mode == ESP8266_MODE_STA && esp8266_config->systemstate == STATE_CWJAP_CONFIG)
                 {
-                    printf("join Wifi timeout...,retrying...\n");
+                    //printf("join Wifi timeout...,retrying...\n");
                     esp8266_config->retry_count = 0;
                 }
                 else
                 {
-                    printf("ESP8266 Timeout,retrying %d times...\n", esp8266_config->retry_count);
+                    //printf("ESP8266 Timeout,retrying %d times...\n", esp8266_config->retry_count);
                 }
             }
             if(esp8266_config->retry_count >= ESP8266_RETRY_TIMERS)
