@@ -104,8 +104,8 @@ cmake-build-*-*
 *.d
 
 # 忽略Core dump文件
-core
-*.core
+# core
+# *.core
 
 # ==============================
 # Other Common Ignores

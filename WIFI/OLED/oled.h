@@ -1,79 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////////	 
-//???????????????δ????????????????????????κ????
-//?о??????
-//????????http://shop73023976.taobao.com/?spm=2013.1.0.0.M4PqC2
-//
-//  ?? ?? ??   : main.c
-//  ?? ?? ??   : v2.0
-//  ??    ??   : Evk123
-//  ????????   : 2014-0101
-//  ??????   : 
-//  ????????   : 0.69??OLED ??????????(STM32F103ZE???IIC)
-//              ???: 
-//              ----------------------------------------------------------------
-//              GND   ?????
-//              VCC   ??5V??3.3v???
-//              SCL   ??PD6??SCL??
-//              SDA   ??PD7??SDA??            
-//              ----------------------------------------------------------------
-//Copyright(C) ?о??????2014/3/16
-//All rights reserved
-//////////////////////////////////////////////////////////////////////////////////
 #ifndef __OLED_H
-#define __OLED_H			  	 
-#include "stdlib.h"
+#define __OLED_H 
+
 #include "main.h"
+#include "stdlib.h"	
 
-#define OLED_MODE 0
-#define SIZE 8
-#define XLevelL		0x00
-#define XLevelH		0x10
-#define Max_Column	128
-#define Max_Row		64
-#define	Brightness	0xFF 
-#define X_WIDTH 	128
-#define Y_WIDTH 	64	    						  
-//-----------------OLED IIC??????----------------  					   
+//-----------------OLED端口定义---------------- 
 
-#define OLED_SCLK_Clr() HAL_GPIO_WritePin(OLED_SCL_GPIO_Port, OLED_SCL_Pin, GPIO_PIN_RESET)//SCL
-#define OLED_SCLK_Set() HAL_GPIO_WritePin(OLED_SCL_GPIO_Port, OLED_SCL_Pin, GPIO_PIN_SET);
+#define OLED_SCL_Clr() HAL_GPIO_WritePin(SCL_OLED_GPIO_Port,SCL_OLED_Pin, GPIO_PIN_RESET)//SCL
+#define OLED_SCL_Set() HAL_GPIO_WritePin(SCL_OLED_GPIO_Port,SCL_OLED_Pin, GPIO_PIN_SET)
 
-#define OLED_SDIN_Clr() HAL_GPIO_WritePin(OLED_SDA_GPIO_Port, OLED_SDA_Pin, GPIO_PIN_RESET);//SDA
-#define OLED_SDIN_Set() HAL_GPIO_WritePin(OLED_SDA_GPIO_Port, OLED_SDA_Pin, GPIO_PIN_SET)
+#define OLED_SDA_Clr() HAL_GPIO_WritePin(SDA_OLED_GPIO_Port,SDA_OLED_Pin, GPIO_PIN_RESET)//SDA
+#define OLED_SDA_Set() HAL_GPIO_WritePin(SDA_OLED_GPIO_Port,SDA_OLED_Pin, GPIO_PIN_SET)
 
+#define OLED_RES_Clr() HAL_GPIO_WritePin(RES_OLED_GPIO_Port,RES_OLED_Pin, GPIO_PIN_RESET)//RES
+#define OLED_RES_Set() HAL_GPIO_WritePin(RES_OLED_GPIO_Port,RES_OLED_Pin, GPIO_PIN_SET)
+
+#define OLED_DC_Clr()  HAL_GPIO_WritePin(DC_OLED_GPIO_Port,DC_OLED_Pin, GPIO_PIN_RESET)//DC
+#define OLED_DC_Set()  HAL_GPIO_WritePin(DC_OLED_GPIO_Port,DC_OLED_Pin, GPIO_PIN_SET)
  		     
-#define OLED_CMD  0	//д????
-#define OLED_DATA 1	//д????
+#define OLED_CS_Clr()  HAL_GPIO_WritePin(CS_OLED_GPIO_Port,CS_OLED_Pin, GPIO_PIN_RESET)//CS
+#define OLED_CS_Set()  HAL_GPIO_WritePin(CS_OLED_GPIO_Port,CS_OLED_Pin, GPIO_PIN_SET)
 
 
-//OLED?????ú???
-void OLED_WR_Byte(unsigned dat,unsigned cmd);  
-void OLED_Display_On(void);
-void OLED_Display_Off(void);	   							   		    
-void OLED_Init(void);
+#define OLED_CMD  0	//写命令
+#define OLED_DATA 1	//写数据
+
+typedef unsigned char u8;
+typedef unsigned int u16;
+typedef unsigned long u32;
+	
+void OLED_ClearPoint(u8 x,u8 y);
+void OLED_ColorTurn(u8 i);
+void OLED_DisplayTurn(u8 i);
+void OLED_WR_Byte(u8 dat,u8 mode);
+void OLED_DisPlay_On(void);
+void OLED_DisPlay_Off(void);
+void OLED_Refresh(void);
 void OLED_Clear(void);
-void OLED_DrawPoint(uint8_t x,uint8_t y,uint8_t t);
-void OLED_Fill(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t dot);
-void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size);
-void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size);
-void OLED_ShowString(uint8_t x,uint8_t y, uint8_t *p,uint8_t Char_Size);	 
-void OLED_Set_Pos(unsigned char x, unsigned char y);
-void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
-void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
-void Delay_50ms(unsigned int Del_50ms);
-void Delay_1ms(unsigned int Del_1ms);
-void fill_picture(unsigned char fill_Data);
-void Picture(void);
-void IIC_Start(void);
-void IIC_Stop(void);
-void Write_IIC_Command(unsigned char IIC_Command);
-void Write_IIC_Data(unsigned char IIC_Data);
-void Write_IIC_Byte(unsigned char IIC_Byte);
+void OLED_DrawPoint(u8 x,u8 y,u8 t);
+void OLED_DrawLine(u8 x1,u8 y1,u8 x2,u8 y2,u8 mode);
+void OLED_DrawCircle(u8 x,u8 y,u8 r);
+void OLED_ShowChar(u8 x,u8 y,u8 chr,u8 size1,u8 mode);
+void OLED_ShowChar6x8(u8 x,u8 y,u8 chr,u8 mode);
+void OLED_ShowString(u8 x,u8 y,u8 *chr,u8 size1,u8 mode);
+void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size1,u8 mode);
+void OLED_ShowChinese(u8 x,u8 y,u8 num,u8 size1,u8 mode);
+void OLED_ScrollDisplay(u8 num,u8 space,u8 mode);
+void OLED_ShowPicture(u8 x,u8 y,u8 sizex,u8 sizey,u8 BMP[],u8 mode);
+void OLED_Init(void);
 
-void IIC_Wait_Ack(void);
-
-#endif  
-	 
-
-
+#endif
 
