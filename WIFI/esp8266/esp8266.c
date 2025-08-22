@@ -12,6 +12,23 @@ typedef enum
     True = 1
 }Change_Status_Flag_T;
 
+typedef enum {
+    STATE_INIT,          // 初始化状态
+    STATE_AT,            // AT指令测试
+    STATE_CIPMUX_CONFIG,  // 基础配置（CIPMUX+CWMODE）
+    STATE_CWMODE_CONFIG,  // CWMODE配置
+    STATE_AP_CONFIG,     // AP配置（CIPAP+CWSAP）
+    STATE_CREATE_WIFI_CONFIG, // 创建WIFI配置
+    STATE_CWJAP_CONFIG,    // CWJAP配置
+    STATE_TCP_SERVER,    // 启动TCP服务器
+    STATE_READY,         // 就绪状态
+    STATE_CLIENT_CONNECTING,   // 连接中状态
+    STATE_CLIENT_CONNECTED, // 客户端连接
+    STATE_RECIVE,           // 接收状态
+    STATE_SENDING,       // 数据发送中
+    STATE_ERROR,         // 错误状态
+    STATE_TIMEOUT         // 超时状态
+} SystemState;
 
 
 struct ESP8266_Config
@@ -686,11 +703,3 @@ void Excute_User_Callback_Rx(ESP8266_Config* esp8266_config,ESP8266_Callback cal
     }
 }
 
-SystemState Get_ESP8266_SystemState(ESP8266_Config* esp8266_config)
-{
-    if(esp8266_config != NULL)
-    {
-        return esp8266_config->systemstate;
-    }
-    return STATE_ERROR;
-}
