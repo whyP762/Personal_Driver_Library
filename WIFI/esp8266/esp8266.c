@@ -361,6 +361,10 @@ static void Excute_ESP8266_CLIENT_CONNECTED(ESP8266_Config* esp8266_config)
 
 static void Excute_ESP8266_STATE_RECIVE(ESP8266_Config* esp8266_config)
 {
+    if(esp8266_config == NULL)
+    {
+        return;
+    }
     uint8_t payload[256] = {0};
     uint8_t length = 0;
     if(esp8266_config->last_systemstate != STATE_CLIENT_CONNECTED)
@@ -369,7 +373,7 @@ static void Excute_ESP8266_STATE_RECIVE(ESP8266_Config* esp8266_config)
     }
     if(esp8266_config->mode != ESP8266_MODE_STA)
     {
-        if(sscanf(esp8266_config->data,"+IPD,%d,%d:%s",&esp8266_config->current_client_id,&length,&payload) == 3)
+        if(sscanf((char*)esp8266_config->data,"+IPD,%d,%d:%s",&esp8266_config->current_client_id,&length,&payload) == 3)
         {
             // //printf("%s\n",esp8266_config->data);
             esp8266_config->client_id[esp8266_config->current_client_id] = Exist_Client;
@@ -385,7 +389,7 @@ static void Excute_ESP8266_STATE_RECIVE(ESP8266_Config* esp8266_config)
     }
     else
     {
-        if(sscanf(esp8266_config->data,"+IPD,%d:%s",&length,& payload) == 2)
+        if(sscanf((char*)esp8266_config->data,"+IPD,%d:%s",&length,& payload) == 2)
         {
             if(esp8266_config->esp8266_rx_callback == NULL)
             {
@@ -441,14 +445,12 @@ static void ESP8266_Status_Excute(ESP8266_Config* esp8266_config)
 
 static void ESP8266_Status_Switch(ESP8266_Config* esp8266_config)
 {
-    // if(esp8266_config->systemstate)
-    // {
-        for(int i=0; i < sizeof(state_transitions) / sizeof(state_transitions[0]); i++) {
-            if(state_transitions[i].current == esp8266_config->systemstate) {
-                handoff_ESP8266(esp8266_config, state_transitions[i].next);
-                return;
-            }
+    for(int i=0; i < sizeof(state_transitions) / sizeof(state_transitions[0]); i++) {
+        if(state_transitions[i].current == esp8266_config->systemstate) {
+            handoff_ESP8266(esp8266_config, state_transitions[i].next);
+            return;
         }
+    }
 }
 
 
@@ -489,7 +491,7 @@ static void UART_Handle_RX_ESP8266_STATUS(ESP8266_Config* esp8266_config)
     else if(strstr((char *)esp8266_config->data, "CONNECT") != NULL && esp8266_config->mode != ESP8266_MODE_STA)
     {
         // //printf("TCP Connection Request: %s\n", esp8266_config->data);
-        if(sscanf(esp8266_config->data,"%d,CONNECT",&esp8266_config->current_client_id) == 1 && esp8266_config->mode != ESP8266_MODE_STA)
+        if(sscanf((char *)esp8266_config->data,"%d,CONNECT",&esp8266_config->current_client_id) == 1 && esp8266_config->mode != ESP8266_MODE_STA)
         {
             //printf("TCP Connection ID: %d\n", esp8266_config->current_client_id);
             handoff_ESP8266(esp8266_config, STATE_CLIENT_CONNECTING);

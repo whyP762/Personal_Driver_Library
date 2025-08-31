@@ -86,16 +86,16 @@ void SystemClock_Config(void);
 void esp8266_rx_callback(ESP8266_Config* esp8266_config,uint8_t* data)
 {
     uint8_t command = 0;
-    if(esp8266_config != NULL)
+    // if(esp8266_config != NULL)
+    // {
+    if(sscanf(data,"servant+command+%d",&command) == 1)
     {
-        if(sscanf(data,"servant+command+%d",&command) == 1)
+        if (command == 1)
         {
-            if (command == 1)
-            {
-              HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-            }
+          HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
         }
     }
+    // }
 }
 
 int main(void)
